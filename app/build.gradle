@@ -1,0 +1,41 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation libs.selenium.java
+    testImplementation libs.webdrivermanager
+    testImplementation libs.slf4j.simple
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'org.example.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    systemProperty 'browser', System.getProperty('browser', 'chromium')
+    systemProperty 'selenium.remoteUrl', System.getProperty('selenium.remoteUrl', '')
+    systemProperty 'baseUrl', System.getProperty('baseUrl', 'https://smi2.ru/')
+    systemProperty 'authUrl', System.getProperty('authUrl', 'https://smi2.net/dashboard/login')
+    systemProperty 'auth.login', System.getProperty('auth.login', 'Tibisay.Mifflin@AllWebEmails.com')
+    systemProperty 'auth.password', System.getProperty('auth.password', 'asHngu2bcubs')
+
+    testLogging {
+      events "passed", "skipped", "failed", "standardOut", "standardError"
+      showStandardStreams = true
+      exceptionFormat = "full"
+    }
+}
